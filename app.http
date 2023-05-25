@@ -1,0 +1,69 @@
+POST http://localhost:3000/users/
+Content-Type: application/json
+
+{
+  "username": "christopher_phillips",
+  "name": "Adam Richard",
+  "password": "christy@123",
+  "gender": "male",
+  "location": "Detroit"
+}
+
+###
+POST http://localhost:3000/login/
+Content-Type: application/json
+
+{
+  "username": "christopher_phillips",
+  "password": "christy@123"
+}
+
+###
+
+GET http://localhost:3000/states/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+
+###
+GET http://localhost:3000/states/:stateId/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+
+###
+POST http://localhost:3000/districts/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+Content-Type: application/json
+
+{
+  "districtName": "Bagalkot",
+  "stateId": 3,
+  "cases": 2323,
+  "cured": 2000,
+  "active": 315,
+  "deaths": 8
+}
+
+###
+GET http://localhost:3000/districts/:districtId/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+
+###
+
+DELETE http://localhost:3000/districts/:districtId/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+
+###
+PUT http://localhost:3000/districts/:districtId/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
+Content-Type: application/json
+
+{
+  "districtName": "Nadia",
+  "stateId": 3,
+  "cases": 9628,
+  "cured": 6524,
+  "active": 3000,
+  "deaths": 104
+}
+
+###
+GET http://localhost:3000/states/:stateId/stats/
+Authorization: Bearer eyhbGcioiJIUZI1NiIsIn5cCIGIkpXVCJ9.ey1c2VybmFtZSIGImNocm1zdG9waGVyX3BoaWxsaXBzIiwiaWFOIjoxNjg1MDAOMzMyfQ.Q9YagPZsFBrA4ja41yMtIFTeWeF08HdD6YFDTUrvt-w
