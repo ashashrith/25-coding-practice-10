@@ -45,7 +45,7 @@ app.post("/users/", async (request, response) => {
         );`;
     const dbUserResponse = await db.run(createUserQuery);
     const userId = dbUserResponse.lastID;
-    response.send("Created User With userId: '${userID}';");
+    response.send(`Created User With userId: '${userId}';`);
   } else {
     response.status(400);
     response.send("User already exists");
@@ -82,7 +82,7 @@ const authenticationToken = async (request, response, next) => {
     jwtToken = authHeader.split(" ")[1];
   }
   if (jwtToken === undefined) {
-    response.status(400);
+    response.status(401);
     response.send("Invalid JWT Token");
   } else {
     jwt.verify(jwtToken, "ashrith", async (error, payload) => {
@@ -90,6 +90,7 @@ const authenticationToken = async (request, response, next) => {
         response.status(401);
         response.send("Invalid JWT Token");
       } else {
+        request.username = payload.username;
         next();
       }
     });
@@ -119,11 +120,11 @@ app.post("/districts/", authenticationToken, async (request, response) => {
     INSERT INTO district (district_name, state_id, cases, cured, active, deaths)
     VALUES (
         '${districtName}',
-        ${stateID},
-        ${cases},
-        ${cured},
-        ${active},
-        ${deaths};`;
+        ${stateId},
+        '${cases}',
+        '${cured}',
+        '${active}',
+        '${deaths}');`;
   const newDistrict = await db.run(postDistrictQuery);
   const districtId = newDistrict.lastID;
   response.send("District Successfully Added");
@@ -133,6 +134,7 @@ app.get(
   "/districts/:districtId/",
   authenticationToken,
   async (request, response) => {
+    const { districtId } = request.params;
     const getDistrictQuery = `SELECT district_id as districtId, district_name as districtName,
     state_id as stateId, cases, cured, active, deaths FROM district
     WHERE district_id = ${districtId};`;
@@ -159,7 +161,7 @@ app.put(
   async (request, response) => {
     const {
       districtName,
-      stateID,
+      stateId,
       cases,
       cured,
       active,
@@ -169,10 +171,10 @@ app.put(
     const updateDistrictQuery = `UPDATE district SET
     district_name = '${districtName}',
     state_id = ${stateId},
-    cases = ${cases},
-    cured = ${cured},
-    active = ${active},
-    deaths = ${deaths}
+    cases = '${cases}',
+    cured = '${cured}',
+    active = '${active}',
+    deaths = '${deaths}'
     WHERE district_id = ${districtId};`;
     await db.run(updateDistrictQuery);
     response.send("District Details Updated");
@@ -185,15 +187,21 @@ app.get(
   async (request, response) => {
     const { stateId } = request.params;
     const statsQuery = `SELECT 
-    sum(cases) as totalCases,
-    sum(cured) as totalCured,
-    sum(active) as totalActive,
-    sum(deaths) as totalDeaths
-    FROM state NATURAL JOIN district ON
-    state.state_id = district.state_id
+    sum(cases),
+    sum(cured),
+    sum(active),
+    sum(deaths)
+    FROM district
     WHERE state_id = ${stateId};`;
-    const dbStats = await db.get(statsQuery);
-    response.send(dbStats);
+    const stats = await db.get(statsQuery);
+    console.log(stats);
+
+    response.send({
+      totalCases: stats["sum(cases)"],
+      totalCured: stats["sum(cured)"],
+      totalActive: stats["sum(active)"],
+      totalDeaths: stats["sum(deaths)"],
+    });
   }
 );
 
